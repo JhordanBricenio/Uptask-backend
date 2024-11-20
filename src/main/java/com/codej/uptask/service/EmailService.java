@@ -30,7 +30,7 @@ public class EmailService {
     private String urlFront;
 
 
-    public void sendEmail(){
+    /*public void sendEmail(){
         SimpleMailMessage message= new SimpleMailMessage();
         message.setFrom("jhordanbricenocaipo@gmail.com");
         message.setTo("jhordanbricenocaipo@gmail.com");
@@ -38,9 +38,9 @@ public class EmailService {
         message.setText("Esto es el contenido del email");
 
         javaMailSender.send(message);
-    }
+    }*/
 
-    public  void sendEmailTemplate(EmailValuesDTO dto){
+    public  void sendEmail(EmailValuesDTO dto){
         MimeMessage message= javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper= new MimeMessageHelper(message, true);
