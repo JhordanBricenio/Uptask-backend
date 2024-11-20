@@ -29,19 +29,23 @@ public class UserServiceImpl implements IUserService {
     private JwtUtils jwtProvider;
 
     @Override
-    public UserEntity findById(Integer id) {
+    public UserEntity findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
     @Override
+    public Optional<UserEntity> findByTokenPassword(String tokenPassword) {
+        return userRepository.findByTokenPassword(tokenPassword);
+    }
+
+    @Override
     public AuthResponse save(UserEntity user) throws UsuarioFoundException {
-
         Optional<UserEntity> existingUser = userRepository.findByEmail(user.getEmail());
-
-        if (existingUser.isPresent()) {
+        if (user.getId()==null){
+            if (existingUser.isPresent()) {
             throw new UsuarioFoundException("Email already registered");
+            }
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Rol rol = new Rol();
         rol.setId(2L);
@@ -61,6 +65,10 @@ public class UserServiceImpl implements IUserService {
         return authResponse;
     }
 
+    @Override
+    public UserEntity update(UserEntity usuario) throws UsuarioFoundException {
+        return userRepository.save(usuario);
+    }
 
     @Override
     public UserEntity findByEmail(String email) {
