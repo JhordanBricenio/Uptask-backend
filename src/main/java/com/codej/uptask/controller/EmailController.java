@@ -48,7 +48,6 @@ public class EmailController {
 
     @PostMapping("/send-email")
     public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailValuesDTO dto) throws UsuarioFoundException {
-
        UserEntity userEntity= userService.findByEmail(dto.getMailTo());
        if (userEntity==null){
            return new ResponseEntity<>(new MessageDTO("No existe ningún usuario con esas credenciales")
