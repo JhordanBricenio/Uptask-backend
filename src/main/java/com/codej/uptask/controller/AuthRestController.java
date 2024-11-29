@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
-@Slf4j
 public class AuthRestController {
 
     @Autowired
@@ -30,6 +29,8 @@ public class AuthRestController {
 
     @Autowired
     private IUserService userService;
+
+
 
     @PostMapping("/sign-up")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid UserEntity user) throws UsuarioFoundException {

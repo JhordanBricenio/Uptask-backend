@@ -1,6 +1,8 @@
 package com.codej.uptask.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +34,7 @@ public class UserEntity {
     private String email;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String tokenPassword;
@@ -52,6 +55,11 @@ public class UserEntity {
     @JoinTable(name = "user_rol", joinColumns = @JoinColumn(name = "user_id")
             , inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private List<Rol> roles;
+
+    @JsonIgnoreProperties({"user","hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Project> projects;
 
     public void  addRol(Rol rol){
         if (roles == null){

@@ -1,12 +1,17 @@
 package com.codej.uptask.config;
 
 import com.codej.uptask.security.JwtTokenValidator;
+import com.codej.uptask.security.UserDetailsServiceImpl;
 import com.codej.uptask.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,7 +47,9 @@ public class WebSecurityConfig {
                         a -> a
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/email-password/**").permitAll()
-                                .requestMatchers("/api/usuario").permitAll()
+                               /*.requestMatchers("/api/project/**").permitAll()
+                                .requestMatchers("/api/task/**").permitAll()
+                                .requestMatchers("/api/user/**").permitAll()*/
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -51,6 +58,19 @@ public class WebSecurityConfig {
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(UserDetailsServiceImpl userDetailService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailService);
+        return provider;
     }
 
     @Bean
@@ -70,11 +90,5 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    /*public static void main(String[] args) {
-        System.out.println(new BCryptPasswordEncoder().encode("77349523"));
-    }*/
-
-
 
 }

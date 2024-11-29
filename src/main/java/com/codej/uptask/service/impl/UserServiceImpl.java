@@ -66,12 +66,24 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserEntity update(UserEntity usuario) throws UsuarioFoundException {
-        return userRepository.save(usuario);
+    public UserEntity update(UserEntity user) throws UsuarioFoundException {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity findUserProfileByJwt(String jwt) {
+        String email = jwtProvider.getEmailFromToken(jwt);
+        Optional<UserEntity> user=userRepository.findByEmail(email);
+        if(user==null){
+            throw new RuntimeException("Usuario no encontrado con email: " + email);
+        }
+        return user.get();
     }
 
     @Override
     public UserEntity findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario " +
+                        "no encontrado con email: " + email));
     }
 }

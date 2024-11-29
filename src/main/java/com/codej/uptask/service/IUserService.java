@@ -8,11 +8,13 @@ import com.codej.uptask.exception.UsuarioFoundException;
 import java.util.Optional;
 
 public interface IUserService {
-    public UserEntity findById(Long id);
+    UserEntity findById(Long id);
 
-    public Optional<UserEntity>findByTokenPassword(String tokenPassword);
-    public AuthResponse save (UserEntity usuario) throws UsuarioFoundException;
-    public UserEntity update (UserEntity usuario) throws UsuarioFoundException;
+    Optional<UserEntity>findByTokenPassword(String tokenPassword);
+    AuthResponse save (UserEntity usuario) throws UsuarioFoundException;
+    UserEntity update (UserEntity usuario) throws UsuarioFoundException;
 
-    public UserEntity findByEmail(String email);
+    UserEntity findUserProfileByJwt(String jwt);
+
+    UserEntity findByEmail(String email);
 }

@@ -61,6 +61,11 @@ public class JwtUtils {
         }
     }
 
+    public String getEmailFromToken(String token) {
+        DecodedJWT decodedJWT = validateToken(token);
+        return decodedJWT.getSubject();
+    }
+
     public String extractUsername(DecodedJWT decodedJWT){
         return decodedJWT.getSubject().toString();
     }
